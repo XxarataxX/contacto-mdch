@@ -26,7 +26,7 @@ const obtenerContactoPorUUID = async (req, res) => {
 
 const crearContacto = async (req, res) => {
   try {
-    const { uuid, email, nombre, telefono } = req.body;
+    const { uuid, email, nombre, telefono, empresa, cargo } = req.body;
       
     
     if (!uuid || !email || !nombre || !telefono) {
@@ -35,10 +35,13 @@ const crearContacto = async (req, res) => {
           required: ['uuid', 'email', 'nombre', 'telefono']
         });
       }
+      const empresaValue = empresa || null;
+      const cargoValue = cargo || null;
+
 
       const [result] = await pool.query(
         'INSERT INTO contactos (uuid, email, nombre, telefono) VALUES (?, ?, ?, ?)',
-        [uuid, email, nombre, telefono]
+        [uuid, email, nombre, telefono, empresaValue, cargoValue]
       );
 
 
@@ -47,7 +50,9 @@ const crearContacto = async (req, res) => {
         uuid,
         email,
         nombre,
-        telefono
+        telefono,
+        empresa: empresaValue,
+        cargo: cargoValue
       });
   } catch (err) {
     if (err.code === 'ER_DUP_ENTRY') {
