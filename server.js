@@ -1,39 +1,24 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const contactosRoutes = require('./routes/contactosRoutes');
+const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use((req, res, next) => {
-    // Permite solicitudes desde múltiples orígenes (útil para desarrollo)
-    const allowedOrigins = [
-        'http://127.0.0.1:5500',
-        'http://localhost:5500',
-        'https://mdch-contactocharrofront.5n7tjo.easypanel.host/'
-    ];
-    
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.header('Access-Control-Allow-Origin', origin);
-    }
-    
-    // Métodos permitidos
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE, PATCH');
-    
-    // Headers permitidos
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    
-    // Permitir el envío de cookies/tokens (si es necesario)
-    res.header('Access-Control-Allow-Credentials', 'true');
-    
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    
-    next();
-});
+const corsOptions = {
+    origin: [
+      'http://127.0.0.1:5500',
+      'http://localhost:5500',
+      'https://mdch-contactocharrofront.5n7tjo.easypanel.host'
+    ],
+    methods: 'GET,POST,PUT,DELETE,PATCH,OPTIONS',
+    allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',
+    credentials: true
+  };
+  
 
+  app.use(cors(corsOptions)); 
 // Middleware
 app.use(bodyParser.json());
 
