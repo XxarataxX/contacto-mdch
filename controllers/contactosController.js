@@ -40,7 +40,7 @@ const crearContacto = async (req, res) => {
 
 
       const [result] = await pool.query(
-        'INSERT INTO contactos (uuid, email, nombre, telefono) VALUES (?, ?, ?, ?)',
+        'INSERT INTO contactos (uuid, email, nombre, telefono, empresa, cargo) VALUES (?, ?, ?, ?, ?, ?)',
         [uuid, email, nombre, telefono, empresaValue, cargoValue]
       );
 
