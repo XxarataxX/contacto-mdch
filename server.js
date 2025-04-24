@@ -6,15 +6,27 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use((req, res, next) => {
-    // Permite solicitudes desde tu frontend local
-    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500'); // O usa '*' para desarrollo (no recomendado en producción)
+    // Permite solicitudes desde múltiples orígenes (útil para desarrollo)
+    const allowedOrigins = [
+        'http://127.0.0.1:5500',
+        'http://localhost:5500',
+        'https://mdch-contactocharrofront.5n7tjo.easypanel.host/'
+    ];
+    
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+    }
     
     // Métodos permitidos
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE, PATCH');
     
     // Headers permitidos
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    
+    // Permitir el envío de cookies/tokens (si es necesario)
+    res.header('Access-Control-Allow-Credentials', 'true');
+    
     if (req.method === 'OPTIONS') {
         return res.sendStatus(200);
     }
